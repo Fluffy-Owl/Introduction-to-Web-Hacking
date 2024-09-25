@@ -113,7 +113,7 @@ Subdomain enumeration is the process of finding valid subdomains for a domain, b
 
 We will explore three different subdomain enumeration methods: **Brute Force**, **OSINT** (Open-Source Intelligence) and **Virtual Host**.
 
-### OSINT (SSL/TLS Certificates, Search Engines, 
+### 1. OSINT (SSL/TLS Certificates, Search Engines, Sublist3)
 
 #### OSINT - SSL/TLS Certificates
 
@@ -123,7 +123,47 @@ We can use this service to our advantage to discover subdomains belonging to a d
 
 Search engines contain trillions of links to more than a billion websites, which can be an excellent resource for finding new subdomains. Using advanced search methods on websites like Google, such as the site: filter, can narrow the search results. For example, `site:*.domain.com -site:www.domain.com` would only contain results leading to the domain name domain.com but exclude any links to www.domain.com; therefore, it shows us only subdomain names belonging to domain.com.
 
+#### OSINT - Sublist3r
 
+To speed up the process of OSINT subdomain discovery, we can automate the above methods with the help of tools like Sublist3r.
+
+### 2. Brute Force
+
+Bruteforce DNS (Domain Name System) enumeration is the method of trying tens, hundreds, thousands or even millions of different possible subdomains from a pre-defined list of commonly used subdomains. Because this method requires many requests, we automate it with tools to make the process quicker. In this instance, we are using a tool called dnsrecon to perform this.
+
+### 3. Virtual Hosts
+
+
+
+Some subdomains, like development or admin portals, may not appear in public DNS results. Instead, they could be kept on private DNS servers or recorded in `/etc/hosts` (or `c:\windows\system32\drivers\etc\hosts` on Windows), mapping domain names to IP addresses.
+
+Since web servers can host multiple sites on one server, they determine which site to serve by checking the `Host` header in the client's request. By modifying the `Host` header, we can discover hidden subdomains.
+
+#### Automating Subdomain Discovery
+
+You can automate this process with a wordlist using a tool like `ffuf`. Here's an example command:
+
+```bash
+ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt -H "Host: FUZZ.acmeitsupport.thm" -u http://10.10.244.17
+```
+
+- `-w`: Specifies the wordlist to use.
+- `-H`: Adds or modifies the `Host` header. `FUZZ` is replaced by each word in the wordlist.
+- `-u`: Specifies the target URL.
+
+#### Filtering Results by Page Size
+
+To filter out irrelevant results, use the `-fs` option to ignore responses with a specific page size:
+
+```bash
+ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt -H "Host: FUZZ.acmeitsupport.thm" -u http://10.10.244.17 -fs {size}
+```
+
+Replace `{size}` with the most common response size from previous results. This should reveal hidden subdomains that were not previously discovered.
+```
+
+---
+## Authentication Bypass
 
 
 
