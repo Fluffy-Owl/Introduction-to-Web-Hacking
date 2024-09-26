@@ -109,6 +109,19 @@ The format of the S3 buckets is http(s)://{name}.s3.amazonaws.com where {name} i
 ---
 ## Subdomain Enumeration
 
+**What is a Subdomain?**
+
+A **subdomain** is a part of a larger domain name that helps organize different sections of a website. Think of it as a branch off the main website.
+
+For example, in the address `blog.example.com`, "example.com" is the main domain, and "blog" is the subdomain. It acts like a label to separate the "blog" section of the site from the main site.
+
+You can use subdomains to create different sections for things like:
+
+- `store.example.com` for a shopping section
+- `help.example.com` for a help center
+
+It's a way to keep different parts of a website organized without creating a completely separate website.
+
 Subdomain enumeration is the process of finding valid subdomains for a domain, but why do we do this? We do this to expand our attack surface to try and discover more potential points of vulnerability.
 
 We will explore three different subdomain enumeration methods: **Brute Force**, **OSINT** (Open-Source Intelligence) and **Virtual Host**.
@@ -159,8 +172,7 @@ To filter out irrelevant results, use the `-fs` option to ignore responses with 
 ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt -H "Host: FUZZ.acmeitsupport.thm" -u http://10.10.244.17 -fs {size}
 ```
 
-Replace `{size}` with the most common response size from previous results. This should reveal hidden subdomains that were not previously discovered.
-```
+_Replace `{size}` with the most common response size from previous results. This should reveal hidden subdomains that were not previously discovered._
 
 ---
 ## Authentication Bypass
